@@ -2,8 +2,16 @@ import './App.css';
 
 function App() {
   return (
-    <h1>Hello world</h1>
+    printSomething("Hello World")
   );
 }
+
+function printSomething(something: string){
+  console.log(something)
+  return (
+    <h1>{something}</h1>
+  )
+}
+
 
 export default App;
