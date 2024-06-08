@@ -1,15 +1,16 @@
-import './App.css';
 
 function App() {
   return (
-    printSomething("Hello World")
+    <main className='bg-light-orange h-svh flex items-center justify-center'>
+      {printSomething("Hello World")}
+    </main>
   );
 }
 
 function printSomething(something: string){
   console.log(something)
   return (
-    <h1>{something}</h1>
+    <h1 className='text-black text-5xl'>{something}</h1>
   )
 }
 
