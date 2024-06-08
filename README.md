@@ -12,4 +12,4 @@ The tools and languages I am using to work on this project are: React, TypeScrip
 
 - [TypeScript Official Website](https://www.typescriptlang.org)
 - [TailwindCSS Official Website](https://tailwindcss.com)
-- [React Official Website] (https://react.dev)
+- [React Official Website](https://react.dev)
