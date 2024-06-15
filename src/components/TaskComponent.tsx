@@ -1,4 +1,6 @@
 import { TaskProps } from "../lib/definitions";
+import React  from 'react';
+
 
 export const TaskComponent: React.FC<TaskProps> = ({ task, depth = 0 }) => {
     return (

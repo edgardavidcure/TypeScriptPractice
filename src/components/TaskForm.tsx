@@ -3,6 +3,7 @@ import { TaskSchema } from "../lib/zod";
 import { Task } from "../utils/Task";
 import uuid from "react-uuid";
 import { TaskComponent } from "./TaskComponent";
+import React  from 'react';
 export default function TaskForm() {
     const [newTaskValues, setNewTaskValues] = useState({ 
       id: '',  
@@ -13,6 +14,8 @@ export default function TaskForm() {
   
     const [tasks, setTasks] = useState<Task[]>([]);
     const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
+    const [completedCount, setCompletedCount] = useState<number>(0);
+    const [incompleteCount, setIncompleteCount] = useState<number>(0);
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type, checked } = e.target as HTMLInputElement;
@@ -32,7 +35,7 @@ export default function TaskForm() {
         return;
       }
 
-      let id = uuid()
+      const id = uuid()
   
       const newTask = new Task(id, newTaskValues.title, newTaskValues.description, newTaskValues.status);
   
@@ -49,8 +52,31 @@ export default function TaskForm() {
       }
     }, []);
 
+    useEffect(() => {
+      // Function to recursively count completed and incomplete tasks
+      const countTasks = (tasks: Task[]): { completed: number, incomplete: number } => {
+          if (tasks.length === 0) {
+              return { completed: 0, incomplete: 0 };
+          }
+
+          const currentTask = tasks[0];
+          const { completed, incomplete } = countTasks(tasks.slice(1));
+
+          if (currentTask.status) {
+              return { completed: completed + 1, incomplete };
+          } else {
+              return { completed, incomplete: incomplete + 1 };
+          }
+      };
+
+      const { completed, incomplete } = countTasks(tasks);
+      setCompletedCount(completed);
+      setIncompleteCount(incomplete);
+  }, [tasks]);
+
     return (
         <div className="flex h-full w-full justify-center flex-col items-center">
+          
           <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-3/6">
             <div className='flex flex-col'>
               <label htmlFor='title' className='text-lg font-bold'>Title <span>*</span></label>
@@ -99,6 +125,16 @@ export default function TaskForm() {
           <div className="mt-5 w-full flex flex-col items-center">
             <h2 className="text-xl font-bold">Tasks</h2>
             {tasks.length === 0 && <p>No tasks available</p>}
+            <div className="mt-5 w-full flex flex-col items-center">
+                <div className="flex gap-3">
+                    <div>
+                        <p>Completed tasks: {completedCount}</p>
+                    </div>
+                    <div>
+                        <p>Incomplete tasks: {incompleteCount}</p>
+                    </div>
+                </div>
+            </div>
             <div className="flex flex-col gap-5 w-full justify-center items-center">
             {[...tasks].reverse().map((task, index) => (
                 
